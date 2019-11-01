@@ -1,0 +1,25 @@
+syntax="proto3";
+package chat;
+
+option go_package = "chat";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.goproto_enum_prefix_all) = false;
+
+enum CmdType {
+    CmdTypeUnknown = 0;
+    CmdTypeLogin = 1;
+    CmdTypeSendMsg = 2;
+}
+message MetaData{
+    CmdType cmd = 1;
+    int64   seq = 2;
+}
+
+
+message Body{
+   MetaData meta = 1 [(gogoproto.nullable)=false];
+   bytes    msg  = 2 [(gogoproto.nullable)=false];
+}

@@ -25,14 +25,6 @@ func NewTransport(addr string)*Transport {
 	}
 }
 
-func (t *Transport)RegisterSrv(fn PackProcess){
-	t.eventListener.(*netEventListener).Srv = fn
-}
-
-func (t *Transport)RegisterCli(fn PackProcess){
-	t.eventListener.(*netEventListener).Cli = fn
-}
-
 func (t *Transport)Run()error{
 	t.l.RunEventLoop(t.sessionCB)
 	return nil

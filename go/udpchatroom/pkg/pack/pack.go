@@ -5,6 +5,8 @@ import (
 	"net"
 )
 
+type PackProcess func(pack *Pack)error
+
 type Pack struct{
 	Head  *chat.Head
 	PeerAddr  *net.UDPAddr

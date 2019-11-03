@@ -6,12 +6,8 @@ import (
 )
 
 
-type PackProcess func(pack *pack.Pack)error
 
-type netEventListener struct{
-	Srv PackProcess
-	Cli PackProcess
-}
+type netEventListener struct{}
 
 
 
@@ -59,9 +55,7 @@ func(e *netEventListener)OnMessage(session getty.Session, udpCtx interface{}){
 	packPtr.PeerAddr = ctx.PeerAddr
 	//
 	if packPtr.Head.Request != nil{
-		e.Srv(packPtr)
 	}else if packPtr.Head.Response != nil{
-		e.Cli(packPtr)
 	}else{
 		session.Close()
 	}

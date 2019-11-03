@@ -8,18 +8,23 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.marshaler_all) = true;
 option (gogoproto.goproto_enum_prefix_all) = false;
 
-enum CmdType {
-    CmdTypeUnknown = 0;
-    CmdTypeLogin = 1;
-    CmdTypeSendMsg = 2;
+
+
+message RequestMeta{
+    string serviceName = 1;
+    string methodName = 2;
 }
-message MetaData{
-    CmdType cmd = 1;
-    int64   seq = 2;
+
+message ResponseMeta{
+    int32  error_code = 1;
+    string error_msg = 2;
 }
 
 
-message Body{
-   MetaData meta = 1 [(gogoproto.nullable)=false];
-   bytes    msg  = 2 [(gogoproto.nullable)=false];
+message Head{
+    RequestMeta     request  = 1;
+    ResponseMeta    response = 2;
+    int64           seq      = 3;
 }
+
+

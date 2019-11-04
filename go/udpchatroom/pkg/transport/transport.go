@@ -8,7 +8,7 @@ import (
 	"github.com/dubbogo/getty"
 	"github.com/gogo/protobuf/proto"
 	chat "github.com/mfslog/lab/go/udpchatroom/idl"
-	pack2 "github.com/mfslog/lab/go/udpchatroom/pkg/pack"
+	msgPack "github.com/mfslog/lab/go/udpchatroom/pkg/pack"
 	"net"
 	"time"
 )
@@ -25,7 +25,8 @@ func NewTransport(addr string)*Transport {
 	}
 }
 
-func (t *Transport)Run()error{
+func (t *Transport)Run(fn msgPack.PackProcess)error{
+	t.eventListener.(*netEventListener).Process = fn
 	t.l.RunEventLoop(t.sessionCB)
 	return nil
 }
@@ -45,7 +46,7 @@ func (t *Transport)Read(session getty.Session,data  []byte)(interface{},int, err
 	if err != nil{
 		return nil, 0, err
 	}
-	pack := &pack2.Pack{
+	pack := &msgPack.Pack{
 		Head: pbHead,
 		Body:bodyData,
 	}
@@ -59,7 +60,7 @@ func (t *Transport)Write(session getty.Session, udpCtx interface{})([]byte,error
 		ctx *getty.UDPContext
 		ok bool
 		err error
-		packPtr *pack2.Pack
+		packPtr *msgPack.Pack
 		headData []byte
 		bodyLen int
 		headLen int
@@ -69,7 +70,7 @@ func (t *Transport)Write(session getty.Session, udpCtx interface{})([]byte,error
 		return nil, errors.New("not UDPContext type")
 	}
 	//取包
-	packPtr = ctx.Pkg.(*pack2.Pack)
+	packPtr = ctx.Pkg.(*msgPack.Pack)
 
 	//序列化
 	headData,err = proto.Marshal(packPtr.Head)
@@ -118,4 +119,5 @@ func (t *Transport)sessionCB(session getty.Session)error{
 	session.SetPkgHandler(t)
 	return nil
 }
+
 

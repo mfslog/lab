@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-type PackProcess func(pack *Pack)error
+type PackProcess func(pack *Pack)(*Pack,error)
 
 type Pack struct{
 	Head  *chat.Head

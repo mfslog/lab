@@ -7,7 +7,9 @@ import (
 
 
 
-type netEventListener struct{}
+type netEventListener struct{
+	Process pack.PackProcess
+}
 
 
 
@@ -54,9 +56,8 @@ func(e *netEventListener)OnMessage(session getty.Session, udpCtx interface{}){
 	}
 	packPtr.PeerAddr = ctx.PeerAddr
 	//
-	if packPtr.Head.Request != nil{
-	}else if packPtr.Head.Response != nil{
-	}else{
-		session.Close()
+	if packPtr.Head.Response != nil ||
+		packPtr.Head.Request != nil{
+		e.Process(packPtr)
 	}
 }

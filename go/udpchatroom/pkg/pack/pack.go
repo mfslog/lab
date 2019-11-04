@@ -5,10 +5,10 @@ import (
 	"net"
 )
 
-type PackProcess func(pack *Pack)(*Pack,error)
+type PackProcess func(pack *Pack)
 
-type Pack struct{
-	Head  *chat.Head
-	PeerAddr  *net.UDPAddr
-	Body []byte
+type Pack struct {
+	Head     *chat.Head
+	PeerAddr *net.UDPAddr
+	Body     []byte
 }

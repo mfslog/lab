@@ -14,24 +14,24 @@ import (
 )
 
 type Transport struct {
-	l getty.Server
+	l             getty.Server
 	eventListener getty.EventListener
 }
 
-func NewTransport(addr string)*Transport {
+func NewTransport(addr string) *Transport {
 	return &Transport{
 		l:             getty.NewUDPPEndPoint(getty.WithLocalAddress(addr)),
 		eventListener: NewEventLister(),
 	}
 }
 
-func (t *Transport)Run(fn msgPack.PackProcess)error{
+func (t *Transport) Run(fn msgPack.PackProcess) error {
 	t.eventListener.(*netEventListener).Process = fn
 	t.l.RunEventLoop(t.sessionCB)
 	return nil
 }
 
-func (t *Transport)Read(session getty.Session,data  []byte)(interface{},int, error){
+func (t *Transport) Read(session getty.Session, data []byte) (interface{}, int, error) {
 	buf := bytes.NewBuffer(data)
 	totalLenBuf := buf.Next(4)
 	totalLength := binary.BigEndian.Uint32(totalLenBuf)
@@ -43,27 +43,27 @@ func (t *Transport)Read(session getty.Session,data  []byte)(interface{},int, err
 	bodyData := buf.Next(int(totalLength - headLength))
 	pbHead := &chat.Head{}
 	err := pbHead.Unmarshal(headData)
-	if err != nil{
+	if err != nil {
 		return nil, 0, err
 	}
 	pack := &msgPack.Pack{
 		Head: pbHead,
-		Body:bodyData,
+		Body: bodyData,
 	}
 
 	return &pack, int(totalLength), nil
 }
 
 //Write 由于UDP 需要对端地址，所以这里
-func (t *Transport)Write(session getty.Session, udpCtx interface{})([]byte,error){
+func (t *Transport) Write(session getty.Session, udpCtx interface{}) ([]byte, error) {
 	var (
-		ctx *getty.UDPContext
-		ok bool
-		err error
-		packPtr *msgPack.Pack
+		ctx      *getty.UDPContext
+		ok       bool
+		err      error
+		packPtr  *msgPack.Pack
 		headData []byte
-		bodyLen int
-		headLen int
+		bodyLen  int
+		headLen  int
 	)
 	ctx, ok = udpCtx.(*getty.UDPContext)
 	if !ok {
@@ -73,29 +73,27 @@ func (t *Transport)Write(session getty.Session, udpCtx interface{})([]byte,error
 	packPtr = ctx.Pkg.(*msgPack.Pack)
 
 	//序列化
-	headData,err = proto.Marshal(packPtr.Head)
+	headData, err = proto.Marshal(packPtr.Head)
 
 	bodyLen = len(packPtr.Body)
 	headLen = len(headData)
-	totalLenBuf := make([]byte,4,4)
-	binary.BigEndian.PutUint32(totalLenBuf,uint32(headLen + bodyLen))
+	totalLenBuf := make([]byte, 4, 4)
+	binary.BigEndian.PutUint32(totalLenBuf, uint32(headLen+bodyLen))
 
-	headLenBuf := make([]byte, 4,4)
+	headLenBuf := make([]byte, 4, 4)
 	binary.BigEndian.PutUint32(headLenBuf, uint32(headLen))
 
-	buf := bytes.NewBuffer(make([]byte,headLen+bodyLen,headLen+bodyLen))
+	buf := bytes.NewBuffer(make([]byte, headLen+bodyLen, headLen+bodyLen))
 
 	buf.Write(totalLenBuf)
 	buf.Write(headLenBuf)
 	buf.Write(headData)
 	buf.Write(packPtr.Body)
 
-	return buf.Bytes(),err
+	return buf.Bytes(), err
 }
 
-
-
-func (t *Transport)sessionCB(session getty.Session)error{
+func (t *Transport) sessionCB(session getty.Session) error {
 	var (
 		ok      bool
 		udpConn *net.UDPConn
@@ -120,4 +118,6 @@ func (t *Transport)sessionCB(session getty.Session)error{
 	return nil
 }
 
-
+func (t *Transport) WritePack(pack *msgPack.Pack) error {
+	return t.eventListener.(*netEventListener).WritePack(pack)
+}

@@ -8,7 +8,7 @@ type Transport interface {
 }
 
 type Socket interface {
-	Recv(intrepidPackage *pack.IntrepidPackage)
+	Recv()*pack.IntrepidPackage
 	Send(intrepidPackage *pack.IntrepidPackage)
 	Close()error
 	Local() string

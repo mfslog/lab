@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/micro/go-micro"
 	"github.com/mfslog/lab/go/micro/server/hello"
 )
@@ -11,7 +12,7 @@ func main(){
 
 	service.Init()
 
-	hello.RegisterHelloHandler(service.Server(), )
+	hello.RegisterHelloHandler(service.Server(), &Handler{})
 }
 
 
@@ -19,5 +20,6 @@ type Handler struct{}
 
 
 func (h *Handler)SayHello(ctx context.Context, req *hello.SayHelloReq,rsp *hello.SayHelloRsp)error{
-
+	rsp.Reply = fmt.Sprintf("hello %s", req.Name)
+	return nil
 }

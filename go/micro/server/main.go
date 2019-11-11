@@ -13,6 +13,7 @@ func main(){
 	service.Init()
 
 	hello.RegisterHelloHandler(service.Server(), &Handler{})
+	service.Run()
 }
 
 

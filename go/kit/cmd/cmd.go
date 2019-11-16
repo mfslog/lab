@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"github.com/mfslog/lab/go/kit/config"
 	"github.com/spf13/cobra"
-
+	"github.com/go-kit/kit/transport/grpc"
 	"os"
 )
 
 
-var (
-	logger log.Logger
-)
+
 var (
 	RootCmd = &cobra.Command{
 		Use:"",
@@ -29,6 +27,10 @@ var (
 			os.Exit(0)
 		},
 	}
+)
+
+var (
+	grpcSrv  *grpc.Server
 )
 
 
@@ -51,6 +53,8 @@ func run(){
 	if err != nil{
 		panic(err)
 	}
+
+	grpcSrv = grpc.NewServer()
 
 
 }

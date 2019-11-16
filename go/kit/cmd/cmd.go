@@ -2,15 +2,22 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mfslog/lab/go/kit/config"
 	"github.com/spf13/cobra"
+
 	"os"
 )
 
+
+var (
+	logger log.Logger
+)
 var (
 	RootCmd = &cobra.Command{
 		Use:"",
 		Run: func(cmd *cobra.Command, args []string) {
-			
+			run()
+			return
 		},
 	}
 
@@ -25,17 +32,26 @@ var (
 )
 
 
-
-
-
-
-
-
+func Execute(){
+	if err := RootCmd.Execute(); err != nil{
+		os.Exit(-1)
+	}
+}
 
 func init(){
 	RootCmd.AddCommand(versionCmd)
 }
 
-func Execute()error{
-	return RootCmd.Execute()
+
+func run(){
+	var (
+		err error
+	)
+	err  = config.Init()
+	if err != nil{
+		panic(err)
+	}
+
+
 }
+

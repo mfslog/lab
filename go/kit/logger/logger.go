@@ -1,8 +1,14 @@
 package log
 
 import (
-	"fmt"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"github.com/go-kit/kit/log"
+	kitLogrus "github.com/go-kit/kit/log/logrus"
+	"github.com/sirupsen/logrus"
+)
+
+var (
+	logger log.Logger
 )
 
 func Init(level string, path, fileName string) {
@@ -13,5 +19,8 @@ func Init(level string, path, fileName string) {
 		MaxAge:     7,               // days
 		Compress:   true,            // 是否压缩 disabled by default
 	}
-
+	logrusLogger := logrus.New()
+	logrusLogger.SetOutput(hook)
+	logrusLogger.SetFormatter(&logrus.TextFormatter{TimestampFormat: "02-01-2006 15:04:05", FullTimestamp: true})
+	logger = kitLogrus.NewLogrusLogger(logrusLogger)
 }

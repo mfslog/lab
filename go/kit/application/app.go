@@ -9,39 +9,37 @@ import (
 	"github.com/mfslog/lab/go/kit/idl/account"
 )
 
-type Set struct{
+type Set struct {
 	AccApp endpoint.Endpoint
 }
 
-func New(svc service.Service, logger log.Logger)Set{
+func New(svc service.Service, logger log.Logger) Set {
 	var accApp endpoint.Endpoint
 	{
 		accApp = MakeAccApp(svc)
 	}
 	return Set{
-		AccApp:accApp,
+		AccApp: accApp,
 	}
 }
 
-
-func MakeAccApp(s service.Service)endpoint.Endpoint{
-	return func(ctx context.Context, request interface{})(response interface{}, err error){
+func MakeAccApp(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(account.GetAccountReq)
 		do, err := s.Get(req.ID)
-		return Do2DTO(do),err
+		return DO2DTO(do), err
 	}
 }
 
-
-func Do2DTO(src *dao.Account)*account.Account {
-	if src == nil{
+func DO2DTO(src *dao.Account) *account.Account {
+	if src == nil {
 		return nil
 	}
-	
+
 	return &account.Account{
-		Id:                   src.ID,
-		Name:                 src.Name,
-		Email:                src.Email,
-		Password:             src.Password,
+		Id:       src.ID,
+		Name:     src.Name,
+		Email:    src.Email,
+		Password: src.Password,
 	}
 }

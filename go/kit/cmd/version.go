@@ -1,6 +1,5 @@
 package cmd
 
-
 const (
 	MAJOR = 0
 	MINOR = 0

@@ -7,21 +7,21 @@ import (
 )
 
 type Service interface {
-	Get(id int64)(*dao.Account,error)
+	Get(id int64) (*dao.Account, error)
 }
 
-type service struct{
+type service struct {
 	logger log.Logger
-	repo  account.Repository
+	repo   account.Repository
 }
 
-func NewService(logger log.Logger, repo account.Repository)Service{
-	return  &service{
+func NewService(logger log.Logger, repo account.Repository) Service {
+	return &service{
 		logger: logger,
 		repo:   repo,
 	}
 }
 
-func (s *service)Get(id int64)(*dao.Account, error){
-	return  s.repo.Get(id)
+func (s *service) Get(id int64) (*dao.Account, error) {
+	return s.repo.Get(id)
 }

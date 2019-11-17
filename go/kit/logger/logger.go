@@ -1,14 +1,14 @@
-package log
+package logger
 
 import (
-	"gopkg.in/natefinch/lumberjack.v2"
 	"github.com/go-kit/kit/log"
 	kitLogrus "github.com/go-kit/kit/log/logrus"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var (
-	logger log.Logger
+	Logger log.Logger
 )
 
 func Init(level string, path, fileName string) {
@@ -22,5 +22,5 @@ func Init(level string, path, fileName string) {
 	logrusLogger := logrus.New()
 	logrusLogger.SetOutput(hook)
 	logrusLogger.SetFormatter(&logrus.TextFormatter{TimestampFormat: "02-01-2006 15:04:05", FullTimestamp: true})
-	logger = kitLogrus.NewLogrusLogger(logrusLogger)
+	Logger = kitLogrus.NewLogrusLogger(logrusLogger)
 }

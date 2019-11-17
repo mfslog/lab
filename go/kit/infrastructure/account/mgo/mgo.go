@@ -6,9 +6,9 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-type repository struct{
+type repository struct {
 	collection string
-	ses *mgo.Session
+	ses        *mgo.Session
 }
 
 func NewRepository(ses *mgo.Session) account.Repository {
@@ -18,7 +18,9 @@ func NewRepository(ses *mgo.Session) account.Repository {
 	}
 }
 
-func (r *repository)Get(id int64)(*dao.Account,error){
+func (r *repository) Get(id int64) (*dao.Account, error) {
+	ses := r.ses.Copy()
+	defer ses.Close()
 
-	return nil,nil
+	return nil, nil
 }

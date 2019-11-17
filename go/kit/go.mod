@@ -1,11 +1,10 @@
-module github.com/mfslog/lab/kit
+module github.com/mfslog/lab/go/kit
 
 go 1.13
 
 require (
 	github.com/go-kit/kit v0.9.0
 	github.com/golang/protobuf v1.3.2
-	github.com/mfslog/lab/go/kit v0.0.0-20191117030843-1fca7c7a7d57
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.5.0

@@ -1,0 +1,11 @@
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld.deps.json
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld.runtimeconfig.json
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld.runtimeconfig.dev.json
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld.dll
+/Users/apple/workbench/lab/csharp/helloworld/bin/Debug/netcoreapp3.1/helloworld.pdb
+/Users/apple/workbench/lab/csharp/helloworld/obj/Debug/netcoreapp3.1/helloworld.csprojAssemblyReference.cache
+/Users/apple/workbench/lab/csharp/helloworld/obj/Debug/netcoreapp3.1/helloworld.AssemblyInfoInputs.cache
+/Users/apple/workbench/lab/csharp/helloworld/obj/Debug/netcoreapp3.1/helloworld.AssemblyInfo.cs
+/Users/apple/workbench/lab/csharp/helloworld/obj/Debug/netcoreapp3.1/helloworld.dll
+/Users/apple/workbench/lab/csharp/helloworld/obj/Debug/netcoreapp3.1/helloworld.pdb

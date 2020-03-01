@@ -3,16 +3,14 @@ package rpc
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
-	userAssembler "github.com/mfslog/kratos-ddd/assembler/user"
 	"github.com/mfslog/kratos-ddd/app/executor/cmd"
 	"github.com/mfslog/kratos-ddd/app/executor/query"
+	userAssembler "github.com/mfslog/kratos-ddd/assembler/user"
 	"github.com/mfslog/kratos-ddd/domain/aggregate/user"
 	kratosddd "github.com/mfslog/kratos-ddd/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
-
-
 
 type Handler struct {
 	cmdApp   *cmd.AppCmd
@@ -37,7 +35,7 @@ func (h *Handler) GetUser(ctx context.Context, req *kratosddd.GetUserReq) (rsp *
 	var (
 		data *user.User
 	)
-	data ,err = h.queryApp.GetUser(ctx,req.Id)
+	data, err = h.queryApp.GetUser(ctx, req.Id)
 	rsp.User = userAssembler.UserAssembler.DO2DTO(data)
 	return
 }
@@ -47,7 +45,7 @@ func (h *Handler) CreateUser(ctx context.Context, req *kratosddd.CreateUserReq) 
 	var (
 		data *user.User
 	)
-	data,err = h.cmdApp.CreateUser(ctx, userAssembler.UserAssembler.DTO2DO(req.User))
+	data, err = h.cmdApp.CreateUser(ctx, userAssembler.UserAssembler.DTO2DO(req.User))
 	rsp.User = userAssembler.UserAssembler.DO2DTO(data)
 	return
 }

@@ -9,35 +9,33 @@ import (
 	entUser "github.com/mfslog/kratos-ddd/infra/repo/user/ent/user"
 )
 
-
-
 type repo struct {
 	client *ent.Client
 }
 
-func NewRepo(conf *conf.Config) (user.Repo , error){
-	client, err := ent.Open("mysql",conf.MySQL.DSN)
-	fmt.Printf("dsn: %v\n", conf.MySQL.DSN)
-	if err != nil{
-		return nil,err
+func NewRepo(conf *conf.Config) (user.Repo, error) {
+	client, err := ent.Open("mysql", conf.SQL.DSN)
+	fmt.Printf("dsn: %v\n", conf.SQL.DSN)
+	if err != nil {
+		return nil, err
 	}
-	return &repo{client: client},nil
+	return &repo{client: client}, nil
 }
 
-func (r *repo) GetUser(ctx context.Context,id int64) (*user.User, error) {
+func (r *repo) GetUser(ctx context.Context, id int64) (*user.User, error) {
 	ret, err := r.client.User.Query().Where(entUser.ID(int(id))).Only(ctx)
 
-	return r.conv(ret),err
+	return r.conv(ret), err
 }
 
-func (r *repo) CreateUser(ctx context.Context,data *user.User)(error){
-	ret,err := r.client.User.Create().SetAge(data.Age).SetName(data.Name).Save(ctx)
+func (r *repo) CreateUser(ctx context.Context, data *user.User) error {
+	ret, err := r.client.User.Create().SetAge(data.Age).SetName(data.Name).Save(ctx)
 	data = r.conv(ret)
 	return err
 }
 
-func (r *repo)conv(src *ent.User)(*user.User){
-	if src == nil{
+func (r *repo) conv(src *ent.User) *user.User {
+	if src == nil {
 		return nil
 	}
 

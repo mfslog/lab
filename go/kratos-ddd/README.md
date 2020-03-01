@@ -1,5 +1,10 @@
 # kratos-ddd
+
 尝试使用kratos，采用DDD 项目风格
+
+# 启动命令：
+ 当前采用etcd做服务发现
+./kratos-ddd -conf ../configs/ -appid kratos-ddd -discovery.nodes 127.0.0.1:2379
 
 # proto 生成工具
 [prototool](https://github.com/mfslog/prototool)

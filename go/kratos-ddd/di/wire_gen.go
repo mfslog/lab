@@ -28,7 +28,7 @@ func InitApp() (*App, func(), error) {
 	appCmd := cmd.NewAppCmd(repo)
 	appQuery := query.NewAppQuery(repo)
 	handler := rpc.NewHandler(appCmd, appQuery)
-	server, err := grpc.New(handler)
+	server, err := grpc.New(handler, config)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -18,8 +18,8 @@ func NewAppQuery(userRepo user.Repo) *AppQuery {
 	}
 }
 
-func (app *AppQuery) GetUser(ctx context.Context,id int64) (ret *user.User, err error) {
-	ret, err = app.userRepo.GetUser(ctx,id)
+func (app *AppQuery) GetUser(ctx context.Context, id int64) (ret *user.User, err error) {
+	ret, err = app.userRepo.GetUser(ctx, id)
 	if err != nil {
 		log.Error("Get User failed [%+v]", err)
 		err = status.Error(codes.Internal, "get user failed")

@@ -8,5 +8,5 @@ import (
 )
 
 var (
-	AppProvider = wire.NewSet(cmd.NewAppCmd, query.NewAppQuery,repo.Provider)
+	AppProvider = wire.NewSet(cmd.NewAppCmd, query.NewAppQuery, repo.Provider)
 )

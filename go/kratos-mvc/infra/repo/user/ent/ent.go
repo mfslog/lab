@@ -152,7 +152,7 @@ func isSQLConstraintError(err error) (*ConstraintError, bool) {
 		msg = err.Error()
 		// error format per dialect.
 		errors = [...]string{
-			"Error 1062",               // MySQL 1062 error (ER_DUP_ENTRY).
+			"Error 1062",               // SQL 1062 error (ER_DUP_ENTRY).
 			"UNIQUE constraint failed", // SQLite.
 			"duplicate key value violates unique constraint", // PostgreSQL.
 		}
@@ -199,7 +199,7 @@ func insertLastID(ctx context.Context, tx dialect.Tx, insert *sql.InsertBuilder)
 		}
 		return id, nil
 	}
-	// MySQL, SQLite, etc.
+	// SQL, SQLite, etc.
 	var res sql.Result
 	if err := tx.Exec(ctx, query, args, &res); err != nil {
 		return 0, err

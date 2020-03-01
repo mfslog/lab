@@ -18,8 +18,8 @@ func NewAppCmd(userRepo user.Repo) *AppCmd {
 	}
 }
 
-func (app *AppCmd) CreateUser(ctx context.Context,user *user.User) (ret *user.User, err error) {
-	err = app.userRepo.CreateUser(ctx,user)
+func (app *AppCmd) CreateUser(ctx context.Context, user *user.User) (ret *user.User, err error) {
+	err = app.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		log.Error("create user failed [%+v]", err)
 		err = status.Error(codes.Internal, "create user failed")

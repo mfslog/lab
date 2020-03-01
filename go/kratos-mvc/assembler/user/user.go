@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/mfslog/kratos-mvc/model/user"
-	kratos"github.com/mfslog/kratos-mvc/proto"
+	kratos "github.com/mfslog/kratos-mvc/proto"
 )
 
 type userAssembler struct{}

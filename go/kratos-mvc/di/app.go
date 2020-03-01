@@ -19,7 +19,7 @@ func NewApp(svcHandler *rpc.Handler, g *warden.Server, config *conf.Config) (app
 	app = &App{
 		svcHandler: svcHandler,
 		grpc:       g,
-		config:config,
+		config:     config,
 	}
 
 	closeFunc = func() {

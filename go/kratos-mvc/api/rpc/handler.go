@@ -12,8 +12,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-
-
 type Handler struct {
 	cmdApp   *cmd.AppCmd
 	queryApp *query.AppQuery
@@ -37,7 +35,7 @@ func (h *Handler) GetUser(ctx context.Context, req *kratos.GetUserReq) (rsp *kra
 	var (
 		data *user.User
 	)
-	data ,err = h.queryApp.GetUser(ctx,req.Id)
+	data, err = h.queryApp.GetUser(ctx, req.Id)
 	rsp.User = userAssembler.UserAssembler.DO2DTO(data)
 	return
 }
@@ -47,7 +45,7 @@ func (h *Handler) CreateUser(ctx context.Context, req *kratos.CreateUserReq) (rs
 	var (
 		data *user.User
 	)
-	data,err = h.cmdApp.CreateUser(ctx, userAssembler.UserAssembler.DTO2DO(req.User))
+	data, err = h.cmdApp.CreateUser(ctx, userAssembler.UserAssembler.DTO2DO(req.User))
 	rsp.User = userAssembler.UserAssembler.DO2DTO(data)
 	return
 }

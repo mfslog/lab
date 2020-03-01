@@ -14,7 +14,7 @@
         "outputPath": "/Users/apple/workbench/lab/csharp/helloworld/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/apple/.nuget/NuGet/NuGet.Config"
+          "/Users/apple/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"

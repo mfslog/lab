@@ -64,7 +64,7 @@ func NewApp(svcHandler *rpc.Handler, g *warden.Server, config *conf.Config) (app
 		Status:   0,
 	}
 
-	//unregister, err = app.registerDiscovery(ins)
+	//unregister, err = user.registerDiscovery(ins)
 	unregister, err = app.registerEtcd(ins)
 	closeFunc = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)

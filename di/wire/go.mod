@@ -1,4 +1,4 @@
-module github.com/jerryzhou343/lab/wiredi
+module github.com/JerryZhou343/lab/wire
 
 go 1.14
 

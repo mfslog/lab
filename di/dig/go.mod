@@ -1,4 +1,4 @@
-module github.com/jerryzhou/lab/uberdi
+module github.com/JerryZhou343/lab/dig
 
 go 1.14
 

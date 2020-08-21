@@ -7,3 +7,6 @@ all: clean
 
 clean:
 	rm -f bin/${OUTPUT}
+
+docker:
+	docker build -t echo .

@@ -5,7 +5,7 @@ import_path: $PROTOCOL_PATH
 
 #当前项目依赖的proto文件
 protos:
-  - receivetime.proto
+  - receivetime/receivetime.proto
 #依赖导入目录
 includes:
   - $GOPATH/src/github.com/bilibili/kratos/third_party

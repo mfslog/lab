@@ -1,0 +1,21 @@
+
+syntax = "proto3";
+
+option go_package = "github.com/JerryZhou343/lab/istio/receivetime";
+
+package receivetime;
+
+// The greeting service definition.
+service TimeServer {
+    // Sends a greeting
+    rpc GetCurrentTime (GetCurrentTimeRequest) returns (GetCurrentTimeReply) {}
+}
+
+// The request message containing the user's name.
+message GetCurrentTimeRequest {
+}
+
+// The response message containing the greetings
+message GetCurrentTimeReply {
+    int64 current_at = 1;
+}

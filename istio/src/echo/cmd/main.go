@@ -44,7 +44,7 @@ type server struct {
 
 
 const (
-	receiveTarget ="dns:///receivetime-svc"
+	receiveTarget ="dns:///receivetime-svc:50051"
 )
 
 

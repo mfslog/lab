@@ -61,7 +61,7 @@ func main() {
 	}
 	log.Infof("listener start...")
 	s := grpc.NewServer()
-	//pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterTimeServerServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

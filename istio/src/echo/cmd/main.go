@@ -44,7 +44,7 @@ type server struct {
 
 
 const (
-	receiveTarget ="xds:///receivetime"
+	receiveTarget ="dns:///receivetime-svc"
 )
 
 

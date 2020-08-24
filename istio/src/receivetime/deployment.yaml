@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo-server
+  name: receivetime-server
   labels:
-    app: echo-server
+    app: receivetime-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: echo-server
+      app: receivetime-server
   template:
     metadata:
       labels:
-        app: echo-server
+        app: receivetime-server
     spec:
       containers:
-        - name: echo
-          image: echo:latest
+        - name: receivetime
+          image: receivetime:latest
           imagePullPolicy: IfNotPresent #minikube 使用本地镜像
           ports:
             - containerPort: 50051

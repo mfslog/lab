@@ -3,11 +3,38 @@ package main
 import (
 	"context"
 	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"net"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
 	"google.golang.org/grpc"
+	"os"
 	"time"
 )
+
+
+func init() {
+	var err error
+	err = os.MkdirAll("/data/log/receivetime",os.ModePerm)
+	if err != nil{
+		panic(err)
+	}
+	var f *os.File
+	f, err = os.OpenFile("/data/log/receivetime/receivetime.log",os.O_CREATE|os.O_RDWR|os.O_TRUNC,0666)
+	if err != nil{
+		panic(err)
+	}
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(f)
+
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
+}
+
+
 
 const (
 	port = ":50051"

@@ -5,4 +5,4 @@ ENV PORT 50051
 
 EXPOSE $PORT
 
-CMD ["sh","-c","cd usr/local/bin && ./echo"]
+CMD ["sh","-c","cd usr/local/bin && echo"]

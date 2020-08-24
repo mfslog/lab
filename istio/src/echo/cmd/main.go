@@ -8,7 +8,31 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
+	"os"
+	log "github.com/sirupsen/logrus"
 )
+func init() {
+	var err error
+	err = os.MkdirAll("/data/log/echo",os.ModePerm)
+	if err != nil{
+		panic(err)
+	}
+	var f *os.File
+	f, err = os.OpenFile("/data/log/echo/echo.log",os.O_CREATE|os.O_RDWR|os.O_TRUNC,0666)
+	if err != nil{
+		panic(err)
+	}
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(f)
+
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
+}
+
 
 const (
 	port = ":50051"

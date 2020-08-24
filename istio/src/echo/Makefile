@@ -3,10 +3,10 @@
 OUTPUT=echo
 
 all: clean
-	go build -o ./bin/${OUTPUT} cmd/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/${OUTPUT} cmd/main.go
 
 clean:
 	rm -f bin/${OUTPUT}
 
 docker:
-	docker build -t echo .
+	docker build --build-arg git_commit=$(git rev-parse --short HEAD)  -t echo:latest .

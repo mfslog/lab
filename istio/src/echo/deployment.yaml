@@ -17,6 +17,7 @@ spec:
       containers:
         - name: echo
           image: echo:latest
+          imagePullPolicy: IfNotPresent #minikube 使用本地镜像
           ports:
             - containerPort: 50051
           volumeMounts:

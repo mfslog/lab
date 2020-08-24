@@ -44,7 +44,7 @@ type server struct {
 
 
 const (
-	receiveTarget ="dns:///receivetime-svc:50051"
+	receiveTarget ="xds:///receivetime-svc"
 )
 
 
@@ -69,7 +69,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		log.Errorf("Failed to get current time. err:[%v]",err)
 		return  nil,err
 	}
-	return &pb.HelloReply{Message: "Hello " + in.GetName() + fmt.Sprintf("current time:%d",rsp.CurrentAt)}, nil
+	return &pb.HelloReply{Message: "Hello " + in.GetName() + fmt.Sprintf(" current time:%d",rsp.CurrentAt)}, nil
 }
 
 func main() {

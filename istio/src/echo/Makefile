@@ -9,4 +9,4 @@ clean:
 	rm -f bin/${OUTPUT}
 
 docker:
-	docker build --build-arg git_commit=$(git rev-parse --short HEAD)  -t echo:latest .
+	docker build --build-arg git_commit=$(shell git rev-parse --short HEAD)  -t echo:latest .

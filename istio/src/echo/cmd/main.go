@@ -5,7 +5,6 @@ import (
 	"fmt"
 	pb "github.com/JerryZhou343/echo/genproto/github.com/JerryZhou343/lab/istio/echo"
 	"github.com/JerryZhou343/echo/genproto/github.com/JerryZhou343/lab/istio/receivetime"
-	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
 	"os"
@@ -51,7 +50,7 @@ const (
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	logrus.Debugf("Received: %v", in.GetName())
+	log.Debugf("Received: %v", in.GetName())
 	var (
 		cc *grpc.ClientConn
 		err error
@@ -61,13 +60,13 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	req := receivetime.GetCurrentTimeRequest{}
 	cc,err = grpc.Dial(receiveTarget,grpc.WithInsecure())
 	if err != nil{
-		logrus.Errorf("Failed to dial receivetime server. scheme:[%s] err:[%v]",receiveTarget,err)
+		log.Errorf("Failed to dial receivetime server. scheme:[%s] err:[%v]",receiveTarget,err)
 		return nil,err
 	}
 	client  = receivetime.NewTimeServerClient(cc)
 	rsp ,err = client.GetCurrentTime(context.Background(),&req)
 	if err != nil{
-		logrus.Errorf("Failed to get current time. err:[%v]",err)
+		log.Errorf("Failed to get current time. err:[%v]",err)
 		return  nil,err
 	}
 	return &pb.HelloReply{Message: "Hello " + in.GetName() + fmt.Sprintf("current time:%d",rsp.CurrentAt)}, nil
@@ -76,13 +75,13 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		logrus.Fatalf("failed to listen: %v", err)
+		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Infof("listener start....")
+	log.Info("listener start....")
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
-		logrus.Fatalf("failed to serve: %v", err)
+		log.Fatalf("failed to serve: %v", err)
 	}
 }
 

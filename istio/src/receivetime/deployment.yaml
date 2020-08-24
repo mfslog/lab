@@ -22,8 +22,8 @@ spec:
           volumeMounts:
             - mountPath: /data/log
               name: log
-  volumes:
-    - hostPath:
-        path: /data/log
-        type: ""
-      name: log
+      volumes:
+        - hostPath:
+            path: /data/log
+            type: ""
+          name: log

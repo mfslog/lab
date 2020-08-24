@@ -8,4 +8,4 @@ EXPOSE $PORT
 ARG git_commit=0
 ENV git_commit=$git_commit
 
-CMD ["sh","-c","cd /usr/local/bin && receivetime"]
+CMD ["/usr/local/bin/receivetime"]

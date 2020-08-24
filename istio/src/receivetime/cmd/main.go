@@ -60,6 +60,7 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("failed to listen: %v", err)
 	}
+	log.Infof("listener start...")
 	s := grpc.NewServer()
 	//pb.RegisterGreeterServer(s, &server{})
 

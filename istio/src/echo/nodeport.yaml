@@ -9,3 +9,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 50051
+      nodePort: 8081

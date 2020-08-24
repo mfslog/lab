@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
-	log "github.com/sirupsen/logrus"
-	"net"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"net"
 	"os"
 	"time"
 )
@@ -47,7 +46,7 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeReply, error) {
-	logrus.Infof("have get request")
+	log.Infof("have get request")
 	//return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 	at := time.Now().Unix()
 	return &pb.GetCurrentTimeReply{
@@ -58,13 +57,13 @@ func (s *server) SayHello(ctx context.Context, in *pb.GetCurrentTimeRequest) (*p
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		logrus.Fatalf("failed to listen: %v", err)
+		log.Fatalf("failed to listen: %v", err)
 	}
 	log.Infof("listener start...")
 	s := grpc.NewServer()
 	//pb.RegisterGreeterServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
-		logrus.Fatalf("failed to serve: %v", err)
+		log.Fatalf("failed to serve: %v", err)
 	}
 }

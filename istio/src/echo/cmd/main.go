@@ -59,7 +59,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		rsp *receivetime.GetCurrentTimeReply
 	)
 	req := receivetime.GetCurrentTimeRequest{}
-	cc,err = grpc.Dial(receiveTarget)
+	cc,err = grpc.Dial(receiveTarget,grpc.WithInsecure())
 	if err != nil{
 		logrus.Errorf("Failed to dial receivetime server. scheme:[%s] err:[%v]",receiveTarget,err)
 		return nil,err

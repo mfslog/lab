@@ -45,7 +45,7 @@ type server struct {
 }
 
 // SayHello implements helloworld.GreeterServer
-func (s *server) SayHello(ctx context.Context, in *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeReply, error) {
+func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeReply, error) {
 	log.Infof("have get request")
 	//return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 	at := time.Now().Unix()

@@ -3,6 +3,8 @@ COPY bin/echo /usr/local/bin
 
 ENV PORT 50051
 
+ENV GRPC_XDS_BOOTSTRAP=/usr/local/bin/bootstrap.json
+
 EXPOSE $PORT
 
 ARG git_commit=0

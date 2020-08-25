@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	log "github.com/sirupsen/logrus"
+	//_ "google.golang.org/grpc/xds"
 )
 func init() {
 	var err error
@@ -44,7 +45,7 @@ type server struct {
 
 
 const (
-	receiveTarget ="xds:///receivetime-svc"
+	receiveTarget ="dns:///receivetime-svc"+port
 )
 
 

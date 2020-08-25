@@ -4,10 +4,10 @@ metadata:
   name: receivetime-svc
 spec:
   type: ClusterIP
-  clusterIP: None
+  #clusterIP: None
   selector:
     app: receivetime-server
   ports:
     - protocol: TCP
-      port: 8080
+      port: 50051
       targetPort: 50051

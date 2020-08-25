@@ -65,7 +65,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		return nil,err
 	}
 	client  = receivetime.NewTimeServerClient(cc)
-	rsp ,err = client.GetCurrentTime(context.Background(),&req)
+	rsp ,err = client.GetCurrentTime(ctx,&req)
 	if err != nil{
 		log.Errorf("Failed to get current time. err:[%v]",err)
 		return  nil,err

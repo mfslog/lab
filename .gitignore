@@ -3,3 +3,5 @@
 *go.sum
 csharp/helloworld/.vs
 venv
+istio/src/echo/bin/echo
+istio/src/receivetime/bin/receivetime

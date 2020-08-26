@@ -67,7 +67,7 @@ func main() {
 	log.Infof("listener start...")
 	s := grpc.NewServer( grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 		grpc_ctxtags.StreamServerInterceptor(),
-		grpc_opentracing.StreamServerInterceptor(),
+		grpc_opentracing.StreamServerInterceptor(grpc_opentracing.WithTraceHeaderName("x-b3-traceid")),
 		//grpc_prometheus.StreamServerInterceptor,
 		//grpc_zap.StreamServerInterceptor(zapLogger),
 		grpc_logrus.StreamServerInterceptor(log.NewEntry(log.StandardLogger())),
@@ -76,7 +76,7 @@ func main() {
 	)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_ctxtags.UnaryServerInterceptor(),
-			grpc_opentracing.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTraceHeaderName("x-b3-traceid")),
 			//grpc_prometheus.UnaryServerInterceptor,
 			//grpc_zap.UnaryServerInterceptor(zapLogger),
 			grpc_logrus.UnaryServerInterceptor(log.NewEntry(log.StandardLogger())),

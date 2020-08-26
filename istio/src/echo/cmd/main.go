@@ -9,6 +9,7 @@ import (
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
@@ -85,7 +86,7 @@ func main() {
 	log.Info("listener start....")
 	s := grpc.NewServer( grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 		grpc_ctxtags.StreamServerInterceptor(),
-		//grpc_opentracing.StreamServerInterceptor(),
+		grpc_opentracing.StreamServerInterceptor(),
 		//grpc_prometheus.StreamServerInterceptor,
 		//grpc_zap.StreamServerInterceptor(zapLogger),
 		grpc_logrus.StreamServerInterceptor(log.NewEntry(log.StandardLogger())),
@@ -94,7 +95,7 @@ func main() {
 	)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_ctxtags.UnaryServerInterceptor(),
-			//grpc_opentracing.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(),
 			//grpc_prometheus.UnaryServerInterceptor,
 			//grpc_zap.UnaryServerInterceptor(zapLogger),
 			grpc_logrus.UnaryServerInterceptor(log.NewEntry(log.StandardLogger())),

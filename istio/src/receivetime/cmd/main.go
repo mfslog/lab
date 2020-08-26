@@ -3,8 +3,12 @@ package main
 import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
+	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"net"
 	"os"
 	"time"
@@ -46,7 +50,7 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeReply, error) {
-	log.Infof("have get request")
+	log.Infof("have get request:%v",grpc_ctxtags.Extract(ctx).Values())
 	//return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 	at := time.Now().Unix()
 	return &pb.GetCurrentTimeReply{
@@ -60,7 +64,25 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	log.Infof("listener start...")
-	s := grpc.NewServer()
+	s := grpc.NewServer( grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+		grpc_ctxtags.StreamServerInterceptor(),
+		//grpc_opentracing.StreamServerInterceptor(),
+		//grpc_prometheus.StreamServerInterceptor,
+		//grpc_zap.StreamServerInterceptor(zapLogger),
+		grpc_logrus.StreamServerInterceptor(log.NewEntry(log.StandardLogger())),
+		//grpc_auth.StreamServerInterceptor(myAuthFunction),
+		grpc_recovery.StreamServerInterceptor(),
+	)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			//grpc_opentracing.UnaryServerInterceptor(),
+			//grpc_prometheus.UnaryServerInterceptor,
+			//grpc_zap.UnaryServerInterceptor(zapLogger),
+			grpc_logrus.UnaryServerInterceptor(log.NewEntry(log.StandardLogger())),
+			//grpc_auth.UnaryServerInterceptor(myAuthFunction),
+			grpc_recovery.UnaryServerInterceptor(),
+		)),
+	)
 	pb.RegisterTimeServerServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {

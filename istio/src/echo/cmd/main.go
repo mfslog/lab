@@ -5,10 +5,14 @@ import (
 	"fmt"
 	pb "github.com/JerryZhou343/echo/genproto/github.com/JerryZhou343/lab/istio/echo"
 	"github.com/JerryZhou343/echo/genproto/github.com/JerryZhou343/lab/istio/receivetime"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
 	"os"
-	log "github.com/sirupsen/logrus"
 	//_ "google.golang.org/grpc/xds"
 )
 func init() {
@@ -79,7 +83,25 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	log.Info("listener start....")
-	s := grpc.NewServer()
+	s := grpc.NewServer( grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+		grpc_ctxtags.StreamServerInterceptor(),
+		//grpc_opentracing.StreamServerInterceptor(),
+		//grpc_prometheus.StreamServerInterceptor,
+		//grpc_zap.StreamServerInterceptor(zapLogger),
+		grpc_logrus.StreamServerInterceptor(log.NewEntry(log.StandardLogger())),
+	//grpc_auth.StreamServerInterceptor(myAuthFunction),
+		grpc_recovery.StreamServerInterceptor(),
+	)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			//grpc_opentracing.UnaryServerInterceptor(),
+			//grpc_prometheus.UnaryServerInterceptor,
+			//grpc_zap.UnaryServerInterceptor(zapLogger),
+			grpc_logrus.UnaryServerInterceptor(log.NewEntry(log.StandardLogger())),
+			//grpc_auth.UnaryServerInterceptor(myAuthFunction),
+			grpc_recovery.UnaryServerInterceptor(),
+		)),
+		)
 	pb.RegisterGreeterServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

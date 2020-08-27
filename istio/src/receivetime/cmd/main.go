@@ -4,25 +4,23 @@ import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"github.com/openzipkin/zipkin-go"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"net"
 	"os"
 	"time"
-	zipkingrpc "github.com/openzipkin/zipkin-go/middleware/grpc"
 )
-
 
 func init() {
 	var err error
-	err = os.MkdirAll("/data/log/receivetime",os.ModePerm)
-	if err != nil{
+	err = os.MkdirAll("/data/log/receivetime", os.ModePerm)
+	if err != nil {
 		panic(err)
 	}
 	var f *os.File
-	f, err = os.OpenFile("/data/log/receivetime/receivetime.log",os.O_CREATE|os.O_RDWR|os.O_TRUNC,0666)
-	if err != nil{
+	f, err = os.OpenFile("/data/log/receivetime/receivetime.log", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
+	if err != nil {
 		panic(err)
 	}
 	// Log as JSON instead of the default ASCII formatter.
@@ -36,8 +34,6 @@ func init() {
 	log.SetLevel(log.DebugLevel)
 }
 
-
-
 const (
 	port = ":50051"
 )
@@ -49,12 +45,20 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeReply, error) {
-	log.Infof("have get request:%v",grpc_ctxtags.Extract(ctx).Values())
+	log.Infof("have get request:%v", grpc_ctxtags.Extract(ctx).Values())
 	//return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 	at := time.Now().Unix()
+	meta,ok := metadata.FromIncomingContext(ctx)
+	if ok{
+		data := meta.Get("x-b3-traceid")
+		log.Infof("%v",data)
+	}else{
+		log.Infof("not ok")
+	}
+
 	return &pb.GetCurrentTimeReply{
-		CurrentAt:            at,
-	},nil
+		CurrentAt: at,
+	}, nil
 }
 
 func main() {
@@ -63,8 +67,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	log.Infof("listener start...")
-	tracer, err := zipkin.NewTracer(nil)
-	s := grpc.NewServer( grpc.StatsHandler(zipkingrpc.NewServerHandler(tracer)))
+	s := grpc.NewServer()
 	pb.RegisterTimeServerServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {

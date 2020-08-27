@@ -8,10 +8,9 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"net"
 	"os"
 	//_ "google.golang.org/grpc/xds"
@@ -63,6 +62,21 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		client receivetime.TimeServerClient
 		rsp *receivetime.GetCurrentTimeReply
 	)
+	meta,ok := metadata.FromIncomingContext(ctx)
+	if ok{
+		traceID := meta.Get("x-b3-traceid")
+		requestID := meta.Get("x-request-id")
+		spanID := meta.Get("x-b3-spanid")
+		parentspanid := meta.Get("x-b3-parentspanid")
+		sampled := meta.Get("x-b3-sampled")
+		flags := meta.Get("x-b3-flags")
+		spanCtx := meta.Get("x-ot-span-context")
+		log.Infof("traceID:%v, requestID:%v, spanID:%v,parentSpanID:%v, sampled:%v, flags:%v,spanCtx",
+			traceID,requestID,spanID, parentspanid,sampled,flags,spanCtx)
+	}else{
+		log.Infof("not ok")
+	}
+
 	req := receivetime.GetCurrentTimeRequest{}
 	cc,err = grpc.Dial(receiveTarget,grpc.WithInsecure())
 	if err != nil{
@@ -85,21 +99,11 @@ func main() {
 	}
 	log.Info("listener start....")
 	s := grpc.NewServer( grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
-		grpc_ctxtags.StreamServerInterceptor(),
-		grpc_opentracing.StreamServerInterceptor(grpc_opentracing.WithTraceHeaderName("x-b3-traceid")),
-		//grpc_prometheus.StreamServerInterceptor,
-		//grpc_zap.StreamServerInterceptor(zapLogger),
 		grpc_logrus.StreamServerInterceptor(log.NewEntry(log.StandardLogger())),
-	//grpc_auth.StreamServerInterceptor(myAuthFunction),
 		grpc_recovery.StreamServerInterceptor(),
 	)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			grpc_ctxtags.UnaryServerInterceptor(),
-			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTraceHeaderName("x-b3-traceid")),
-			//grpc_prometheus.UnaryServerInterceptor,
-			//grpc_zap.UnaryServerInterceptor(zapLogger),
 			grpc_logrus.UnaryServerInterceptor(log.NewEntry(log.StandardLogger())),
-			//grpc_auth.UnaryServerInterceptor(myAuthFunction),
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
 		)

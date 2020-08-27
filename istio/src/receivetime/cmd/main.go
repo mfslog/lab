@@ -50,8 +50,15 @@ func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeReques
 	at := time.Now().Unix()
 	meta,ok := metadata.FromIncomingContext(ctx)
 	if ok{
-		data := meta.Get("x-b3-traceid")
-		log.Infof("%v",data)
+		traceID := meta.Get("x-b3-traceid")
+		requestID := meta.Get("x-request-id")
+		spanID := meta.Get("x-b3-spanid")
+		parentspanid := meta.Get("x-b3-parentspanid")
+		sampled := meta.Get("x-b3-sampled")
+		flags := meta.Get("x-b3-flags")
+		spanCtx := meta.Get("x-ot-span-context")
+		log.Infof("traceID:%v, requestID:%v, spanID:%v,parentSpanID:%v, sampled:%v, flags:%v,spanCtx",
+			traceID,requestID,spanID, parentspanid,sampled,flags,spanCtx)
 	}else{
 		log.Infof("not ok")
 	}

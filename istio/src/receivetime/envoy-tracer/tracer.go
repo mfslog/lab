@@ -32,7 +32,17 @@ func (e EnvoyTracer) Extract(format interface{}, carrier interface{}) (opentraci
 		logrus.Info("x-b3-traceid",val)
 	}
 
-
+	var md opentracing.TextMapCarrier
+	md , ok = carrier.(opentracing.TextMapCarrier)
+	if ok{
+		err := md.ForeachKey(func(key, val string) error {
+			logrus.Infof("k:%v, val:%v",key,val)
+			return nil
+		})
+		if err != nil{
+			logrus.Errorf("err:%v",err)
+		}
+	}
 
 
 	return nil,opentracing.ErrSpanContextNotFound

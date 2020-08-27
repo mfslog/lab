@@ -71,7 +71,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		sampled := meta.Get("x-b3-sampled")
 		flags := meta.Get("x-b3-flags")
 		spanCtx := meta.Get("x-ot-span-context")
-		log.Infof("traceID:%v, requestID:%v, spanID:%v,parentSpanID:%v, sampled:%v, flags:%v,spanCtx",
+		log.Infof("traceID:%v, requestID:%v, spanID:%v,parentSpanID:%v, sampled:%v, flags:%v,spanCtx:%v",
 			traceID,requestID,spanID, parentspanid,sampled,flags,spanCtx)
 	}else{
 		log.Infof("not ok")

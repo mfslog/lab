@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	envoy_tracer "github.com/JerryZhou343/receivetime/envoy-tracer"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
@@ -9,7 +10,6 @@ import (
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	log "github.com/sirupsen/logrus"
-	"github.com/JerryZhou343/golibs/envoy-tracer"
 	"google.golang.org/grpc"
 	"net"
 	"os"

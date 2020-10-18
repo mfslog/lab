@@ -83,7 +83,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		serviceConfigStr := fmt.Sprintf(`
 {
   "loadBalancingConfig":[
-    {"eds-experimental":{ "EDSServiceName": "%s" }}
+    {"eds_experimental":{ "EDSServiceName": "%s" }}
   ]
 }`, "receivetime-server")
 
@@ -92,7 +92,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 			grpc.WithDefaultServiceConfig(serviceConfigStr))
 
 	if err != nil{
-		log.Errorf("Failed to dial receivetime server. scheme:[%s] err:[%v]",receiveTarget,err)
+		log.Errorf("Failed to dial receivetime server. config:[%s] err:[%v]",serviceConfigStr,err)
 		return nil,err
 	}
 	client  = receivetime.NewTimeServerClient(cc)

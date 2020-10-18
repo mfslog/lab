@@ -1,0 +1,13 @@
+{
+  "xds_servers": [
+    {
+      "server_uri": "dns:///istiod:15010"
+    }
+  ],
+  "node": {
+    "id": "12345",
+    "metadata": {
+      "somekey": "123456789012"
+    }
+  }
+}

@@ -49,7 +49,7 @@ type server struct {
 
 
 const (
-	receiveTarget ="dns:///receivetime-svc"+port
+	receiveTarget ="eds_experimental:///receivetime-server"+port
 )
 
 

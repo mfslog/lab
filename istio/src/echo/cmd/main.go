@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"net"
 	"os"
-	//_ "google.golang.org/grpc/xds"
+	_ "google.golang.org/grpc/xds"
 )
 func init() {
 	var err error

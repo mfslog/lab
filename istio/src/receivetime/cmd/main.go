@@ -10,6 +10,7 @@ import (
 	"net"
 	"os"
 	"time"
+	_ "google.golang.org/grpc/xds"
 )
 
 func init() {

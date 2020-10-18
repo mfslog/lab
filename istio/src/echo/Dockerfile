@@ -5,7 +5,7 @@ COPY bootstrap.json  /usr/local/bin
 ENV PORT 50051
 
 ENV GRPC_XDS_BOOTSTRAP=/usr/local/bin/bootstrap.json
-ENV GRPC_XDS_EXPERIMENTAL_V3_SUPPORT=true
+ENV GRPC_XDS_EXPERIMENTAL_V3_SUPPORT=false
 
 EXPOSE $PORT
 

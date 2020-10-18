@@ -3,7 +3,7 @@ COPY bin/receivetime /usr/local/bin
 COPY bootstrap.json  /usr/local/bin
 
 ENV GRPC_XDS_BOOTSTRAP=/usr/local/bin/bootstrap.json
-ENV GRPC_XDS_EXPERIMENTAL_V3_SUPPORT=true
+ENV GRPC_XDS_EXPERIMENTAL_V3_SUPPORT=false
 
 ENV PORT 50051
 

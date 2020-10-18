@@ -78,7 +78,19 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	}
 
 	req := receivetime.GetCurrentTimeRequest{}
-	cc,err = grpc.Dial(receiveTarget,grpc.WithInsecure())
+	//cc,err = grpc.Dial(receiveTarget,grpc.WithInsecure())
+
+		serviceConfigStr := fmt.Sprintf(`
+{
+  "loadBalancingConfig":[
+    {"eds_experimental":{ "EDSServiceName": "%s" }}
+  ]
+}`, "receivetime-server"+port)
+
+		cc, err = grpc.Dial("anything",
+			grpc.WithInsecure(),
+			grpc.WithDefaultServiceConfig(serviceConfigStr))
+
 	if err != nil{
 		log.Errorf("Failed to dial receivetime server. scheme:[%s] err:[%v]",receiveTarget,err)
 		return nil,err

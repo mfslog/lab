@@ -1,7 +1,7 @@
 {
   "xds_servers": [
     {
-      "server_uri": "dns:///istiod:15010"
+      "server_uri": "172.17.0.3:15010"
     }
   ],
   "node": {

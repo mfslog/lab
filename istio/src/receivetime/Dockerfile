@@ -4,7 +4,8 @@ COPY bootstrap.json  /usr/local/bin
 
 ENV GRPC_XDS_BOOTSTRAP=/usr/local/bin/bootstrap.json
 ENV GRPC_XDS_EXPERIMENTAL_V3_SUPPORT=false
-
+ENV GRPC_TRACE=all
+ENV GRPC_VERBOSITY=DEBUG
 ENV PORT 50051
 
 EXPOSE $PORT

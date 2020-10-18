@@ -11,10 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	_ "google.golang.org/grpc/xds"
 	"net"
 	"os"
-	_ "google.golang.org/grpc/xds"
-	"time"
 )
 func init() {
 	var err error
@@ -91,7 +90,6 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		cc, err = grpc.Dial("anything",
 			grpc.WithInsecure(),
 			grpc.WithDefaultServiceConfig(serviceConfigStr))
-		grpc.ConnectionTimeout(time.Second * 5)
 
 	if err != nil{
 		log.Errorf("Failed to dial receivetime server. config:[%s] err:[%v]",serviceConfigStr,err)

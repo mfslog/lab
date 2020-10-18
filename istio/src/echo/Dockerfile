@@ -1,5 +1,6 @@
 FROM alpine:3.12
 COPY bin/echo /usr/local/bin
+COPY bootstrap.json  /usr/local/bin
 
 ENV PORT 50051
 

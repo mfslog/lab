@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
+	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -67,6 +68,10 @@ func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeReques
 	return &pb.GetCurrentTimeReply{
 		CurrentAt: at,
 	}, nil
+}
+
+func init(){
+	grpc_logrus.ReplaceGrpcLogger(log.NewEntry(log.StandardLogger()))
 }
 
 func main() {

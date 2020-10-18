@@ -103,7 +103,9 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	}
 	return &pb.HelloReply{Message: "Hello " + in.GetName() + fmt.Sprintf(" current time:%d",rsp.CurrentAt)}, nil
 }
-
+func init(){
+	grpc_logrus.ReplaceGrpcLogger(log.NewEntry(log.StandardLogger()))
+}
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

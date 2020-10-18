@@ -34,6 +34,7 @@ func init() {
 
 	// Only log the warning severity or above.
 	log.SetLevel(log.DebugLevel)
+	grpc_logrus.ReplaceGrpcLogger(log.NewEntry(log.StandardLogger()))
 }
 
 const (
@@ -70,9 +71,7 @@ func (s *server) GetCurrentTime(ctx context.Context, in *pb.GetCurrentTimeReques
 	}, nil
 }
 
-func init(){
-	grpc_logrus.ReplaceGrpcLogger(log.NewEntry(log.StandardLogger()))
-}
+
 
 func main() {
 	lis, err := net.Listen("tcp", port)

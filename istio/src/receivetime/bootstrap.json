@@ -1,7 +1,13 @@
 {
   "xds_servers": [
     {
-      "server_uri": "172.17.0.3:15010"
+      "server_uri": "dns:///istiod:15010"
     }
-  ]
+  ],
+  "node": {
+    "id": "router-0.0.0.0-1-0.0.0.0",
+    "metadata": {
+      "somekey": "123456789012"
+    }
+  }
 }

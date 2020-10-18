@@ -83,7 +83,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 		serviceConfigStr := fmt.Sprintf(`
 {
   "loadBalancingConfig":[
-    {"eds_experimental":{ "EDSServiceName": "%s" }}
+    {"eds-experimental":{ "EDSServiceName": "%s" }}
   ]
 }`, "receivetime-server")
 

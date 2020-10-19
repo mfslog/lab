@@ -86,7 +86,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
   "loadBalancingConfig":[
     {"eds_experimental":{ "EDSServiceName": "%s" }}
   ]
-}`, "default/receivetime-svc")
+}`, "receivetime-svc.default.svc.cluster.local")
 
 		cc, err = grpc.Dial("anything",
 			grpc.WithInsecure(),

@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
+	consulapi "github.com/armon/consul-api"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -81,8 +83,30 @@ func main() {
 	log.Infof("listener start...")
 	s := grpc.NewServer()
 	pb.RegisterTimeServerServer(s, &server{})
-
+	register()
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+}
+
+func register()(err error){
+	var client *consulapi.Client
+	client,err = consulapi.NewClient(&consulapi.Config{
+		Address:    "192.168.56.102:8500",
+		WaitTime:   3,
+	})
+	if err != nil{
+		log.Fatalf("new consul client failed. err:[%v]",err)
+		return
+	}
+	svcInfo := consulapi.AgentServiceRegistration{
+		ID:    uuid.NewV4().String(),
+		Name:  "receivetime",
+		Tags:  nil,
+		Port:  50051,
+		Check: nil,
+	}
+
+	err = client.Agent().ServiceRegister(&svcInfo)
+	return
 }

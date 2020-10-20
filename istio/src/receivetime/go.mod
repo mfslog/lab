@@ -6,7 +6,7 @@ require (
 	github.com/golang/protobuf v1.4.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/opentracing/opentracing-go v1.1.0
-	github.com/openzipkin/zipkin-go v0.2.3
 	github.com/sirupsen/logrus v1.6.0
 	google.golang.org/grpc v1.31.0
+	github.com/hashicorp/consul v1.8.4
 )

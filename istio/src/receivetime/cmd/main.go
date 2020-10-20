@@ -3,20 +3,20 @@ package main
 import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
-	consulapi "github.com/hashicorp/consul/api"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	consulapi "github.com/hashicorp/consul/api"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	_ "google.golang.org/grpc/xds"
 	"net"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
-	_ "google.golang.org/grpc/xds"
 )
 
 func init() {
@@ -96,7 +96,7 @@ func main() {
 
 	for {
 		s := <-c
-		log.Info("get a signal %s", s.String())
+		//log.Info("get a signal %s", s.String())
 		switch s {
 		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
 			deregister(id)

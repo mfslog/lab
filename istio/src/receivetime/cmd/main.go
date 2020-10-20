@@ -12,6 +12,8 @@ import (
 	"google.golang.org/grpc/metadata"
 	"net"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 	_ "google.golang.org/grpc/xds"
 )
@@ -83,13 +85,30 @@ func main() {
 	log.Infof("listener start...")
 	s := grpc.NewServer()
 	pb.RegisterTimeServerServer(s, &server{})
-	register()
+	var id string
+	id , err = register()
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
+
+	for {
+		s := <-c
+		log.Info("get a signal %s", s.String())
+		switch s {
+		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
+			deregister(id)
+			time.Sleep(time.Second)
+			return
+		case syscall.SIGHUP:
+		default:
+			return
+		}
+	}
 }
 
-func register()(err error){
+func register()(id string,err error){
 	var client *consulapi.Client
 	client,err = consulapi.NewClient(&consulapi.Config{
 		Address:    "192.168.56.102:8500",
@@ -99,8 +118,9 @@ func register()(err error){
 		log.Fatalf("new consul client failed. err:[%v]",err)
 		return
 	}
+	id = uuid.NewV4().String()
 	svcInfo := consulapi.AgentServiceRegistration{
-		ID:    uuid.NewV4().String(),
+		ID: id,
 		Name:  "receivetime",
 		Tags:  nil,
 		Port:  50051,
@@ -108,5 +128,20 @@ func register()(err error){
 	}
 
 	err = client.Agent().ServiceRegister(&svcInfo)
+	return
+}
+
+func deregister(id string)(err error){
+	var client *consulapi.Client
+	client,err = consulapi.NewClient(&consulapi.Config{
+		Address:    "192.168.56.102:8500",
+		WaitTime:   3,
+	})
+	if err != nil{
+		log.Fatalf("new consul client failed. err:[%v]",err)
+		return
+	}
+
+	err = client.Agent().ServiceDeregister(id)
 	return
 }

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	pb "github.com/JerryZhou343/receivetime/genproto/github.com/JerryZhou343/lab/istio/receivetime"
-	consulapi "github.com/armon/consul-api"
+	consulapi "github.com/hashicorp/consul/api"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	uuid "github.com/satori/go.uuid"
@@ -13,6 +13,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 	_ "google.golang.org/grpc/xds"
@@ -120,11 +121,21 @@ func register()(id string,err error){
 	}
 	id = uuid.NewV4().String()
 	svcInfo := consulapi.AgentServiceRegistration{
-		ID: id,
-		Name:  "receivetime",
-		Tags:  nil,
-		Port:  50051,
-		Check: nil,
+		Kind:              "",
+		ID:                id,
+		Name:              "receivetime",
+		Tags:              nil,
+		Port:              50051,
+		Address:           InternalIP(),
+		TaggedAddresses:   nil,
+		EnableTagOverride: false,
+		Meta:              nil,
+		Weights:           nil,
+		Check:             nil,
+		Checks:            nil,
+		Proxy:             nil,
+		Connect:           nil,
+		Namespace:         "",
 	}
 
 	err = client.Agent().ServiceRegister(&svcInfo)
@@ -144,4 +155,36 @@ func deregister(id string)(err error){
 
 	err = client.Agent().ServiceDeregister(id)
 	return
+}
+
+func InternalIP() string {
+	inters, err := net.Interfaces()
+	if err != nil {
+		return ""
+	}
+	for _, inter := range inters {
+		if !isUp(inter.Flags) {
+			continue
+		}
+		if !strings.HasPrefix(inter.Name, "lo") {
+			addrs, err := inter.Addrs()
+			if err != nil {
+				continue
+			}
+			for _, addr := range addrs {
+				if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+					if ipnet.IP.To4() != nil {
+						return ipnet.IP.String()
+					}
+				}
+			}
+		}
+	}
+	return ""
+}
+
+
+// isUp Interface is up
+func isUp(v net.Flags) bool {
+	return v&net.FlagUp == net.FlagUp
 }

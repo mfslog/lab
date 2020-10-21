@@ -88,6 +88,7 @@ func main() {
 	pb.RegisterTimeServerServer(s, &server{})
 	var id string
 	id , err = register()
+	log.Infof("register id:[%s]",id)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
@@ -96,7 +97,7 @@ func main() {
 
 	for {
 		s := <-c
-		//log.Info("get a signal %s", s.String())
+		log.Infof("get a signal %s", s.String())
 		switch s {
 		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
 			deregister(id)

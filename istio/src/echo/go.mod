@@ -7,4 +7,6 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/sirupsen/logrus v1.6.0
 	google.golang.org/grpc v1.31.0
+    github.com/hashicorp/consul v1.8.4
+    github.com/hashicorp/consul/api v1.7.0
 )

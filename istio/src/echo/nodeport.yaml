@@ -3,11 +3,12 @@ kind: Service
 metadata:
   name: echo-service
 spec:
-  type: NodePort
+  type: ClusterIP
+  clusterIP: None
   selector:
     app: echo-server
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 50051
-      nodePort: 32765
+      #nodePort: 32765

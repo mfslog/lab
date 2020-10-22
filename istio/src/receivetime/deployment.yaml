@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: receivetime-server
+  name: receivetime
   labels:
-    app: receivetime-server
+    app: receivetime
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: receivetime-server
+      app: receivetime
   template:
     metadata:
       labels:
-        app: receivetime-server
+        app: receivetime
     spec:
       containers:
         - name: receivetime

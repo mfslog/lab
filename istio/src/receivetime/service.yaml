@@ -4,7 +4,7 @@ metadata:
   name: receivetime-svc
 spec:
   type: ClusterIP
-  #clusterIP: None
+  clusterIP: None
   selector:
     app: receivetime-server
   ports:
